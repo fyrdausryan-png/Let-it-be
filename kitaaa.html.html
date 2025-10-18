@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hai Cantikkk &lt;3</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f4f6;
+      color: #444;
+      transition: background-image 0.3s ease-in-out;
+      background-size: cover;
+      background-position: center;
+    }
+    .login-container {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; flex-direction: column;
+      background: linear-gradient(135deg, #ffd1dc, #e0e0e0);
+    }
+    .login-box {
+      background: white; padding: 30px; border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    input {
+      display: block; margin: 10px auto; padding: 10px;
+      width: 80%; border-radius: 10px; border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #ffb6c1; border: none; padding: 10px 20px;
+      border-radius: 10px; font-size: 16px; cursor: pointer;
+    }
+    nav {
+      display: flex; justify-content: center; gap: 20px;
+      background: #ffe4ec; padding: 15px; font-weight: bold;
+    }
+    nav a {
+      text-decoration: none; color: #555; transition: 0.3s;
+    }
+    nav a:hover {
+      color: #ff4d6d;
+    }
+    .content {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      min-height: 100vh;
+      display: none;
+    }
+    .content.active {
+      display: block;
+    }
+    [contenteditable="true"] {
+      border: 1px dashed #ccc;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .edit-btn {
+      background: #ffb6c1; border: none; padding: 5px 10px;
+      border-radius: 5px; font-size: 14px; cursor: pointer; margin-top: 10px;
+    }
+    .hidden { display: none; }
+    .gallery img {
+      max-width: 150px; margin: 5px; border-radius: 10px;
+    }
+    .upload-section {
+      margin-top: 10px; text-align: center;
+    }
+    .music-player {
+      text-align: center; margin-top: 15px;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login-page" class="login-container">
+  <div class="login-box">
+    <h2>Hallo Cantikk 💖</h2>
+    <input type="text" id="name" placeholder="Masukkan nama">
+    <input type="password" id="code" placeholder="Masukkan kode unik">
+    <button onclick="login()">Masuk</button>
+  </div>
+</div>
+
+<div id="main-page" class="hidden">
+  <nav>
+    <a href="#" onclick="showPage('ade')">Adekk</a>
+    <a href="#" onclick="showPage('notes')">Notes</a>
+    <a href="#" onclick="showPage('kita')">Kita</a>
+    <a href="#" onclick="logout()" style="color:#999;">Keluar</a>
+  </nav>
+
+  <div class="upload-section">
+    <label>Upload Background: <input type="file" accept="image/*" onchange="changeBackground(event)"></label>
+  </div>
+
+  <div id="ade" class="content active">
+    <h2 contenteditable="true" id="ade-title">Hai Cantikkk &lt;3</h2>
+    <p contenteditable="true" id="ade-text">Tuliskan sesuatu yang manis di sini ya...</p>
+    <button class="edit-btn" onclick="finishEdit('ade')">Selesai Edit 💞</button>
+  </div>
+
+  <div id="notes" class="content">
+    <h2 contenteditable="true" id="notes-title">Catatan Kamu 💌</h2>
+    <p contenteditable="true" id="notes-text">Kamu bisa tulis kenangan, pesan, atau apa pun yang kamu mau di sini.</p>
+    <button class="edit-btn" onclick="finishEdit('notes')">Selesai Edit 💞</button>
+  </div>
+
+  <div id="kita" class="content">
+    <h2 contenteditable="true" id="kita-title">Kenangan Kita 📸</h2>
+    <div class="gallery" id="gallery"></div>
+    <input type="file" accept="image/*" multiple onchange="uploadImages(event)">
+    <button class="edit-btn" onclick="finishEdit('kita')">Selesai Edit 💞</button>
+  </div>
+
+  <div class="music-player">
+    <label>Upload Lagu (MP3): <input type="file" accept="audio/mp3" onchange="uploadMusic(event)"></label>
+    <audio id="music" autoplay loop></audio>
+  </div>
+</div>
+
+<script>
+const USER = { name: "Nanda Honey Mutia", code: "20042005" };
+let currentPage = 0;
+const pages = ['ade', 'notes', 'kita'];
+
+function login() {
+  const n = document.getElementById("name").value.trim();
+  const c = document.getElementById("code").value.trim();
+  if (n === USER.name && c === USER.code) {
+    document.getElementById("login-page").classList.add("hidden");
+    document.getElementById("main-page").classList.remove("hidden");
+    showPage(pages[currentPage]);
+  } else {
+    alert("Nama atau kode salah 💔");
+  }
+}
+
+function logout() {
+  document.getElementById("main-page").classList.add("hidden");
+  document.getElementById("login-page").classList.remove("hidden");
+}
+
+function showPage(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  currentPage = pages.indexOf(id);
+}
+
+window.addEventListener('wheel', (e) => {
+  if (e.deltaY > 0 && currentPage < pages.length - 1) {
+    currentPage++;
+    showPage(pages[currentPage]);
+  } else if (e.deltaY < 0 && currentPage > 0) {
+    currentPage--;
+    showPage(pages[currentPage]);
+  }
+});
+
+function finishEdit(page) {
+  const title = document.getElementById(page + '-title');
+  const text = document.getElementById(page + '-text');
+  if (title) title.contentEditable = 'false';
+  if (text) text.contentEditable = 'false';
+  const btn = event.target;
+  btn.style.display = 'none';
+  // Save to localStorage
+  if (title) localStorage.setItem(page + '-title', title.innerHTML);
+  if (text) localStorage.setItem(page + '-text', text.innerHTML);
+}
+
+function changeBackground(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      document.body.style.backgroundImage = `url('${reader.result}')`;
+      localStorage.setItem('bg', reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function uploadImages(event) {
+  const files = Array.from(event.target.files).slice(0,10);
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
+  const photoUrls = [];
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = document.createElement('img');
+      img.src = reader.result;
+      gallery.appendChild(img);
+      photoUrls.push(reader.result);
+      if (photoUrls.length === files.length) {
+        localStorage.setItem('photos', JSON.stringify(photoUrls));
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function uploadMusic(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const music = document.getElementById('music');
+      music.src = e.target.result;
+      music.play();
+      localStorage.setItem('music', e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Load data on page load
+window.onload = () => {
+  const bg = localStorage.getItem('bg');
+  if (bg) document.body.style.backgroundImage = `url('${bg}')`;
+
+  const music = localStorage.getItem('music');
+  if (music) {
+    document.getElementById('music').src = music;
+  }
+
+  pages.forEach(page => {
+    const title = localStorage.getItem(page + '-title');
+    const text = localStorage.getItem(page + '-text');
+    if (title) {
+      document.getElementById(page + '-title').innerHTML = title;
+      document.getElementById(page + '-title').contentEditable = 'false';
+    }
+    if (text) {
+      document.getElementById(page + '-text').innerHTML = text;
+      document.getElementById(page + '-text').contentEditable = 'false';
+    }
+    // Hide edit button if already edited
+    if (title || text) {
+      const btn = document.querySelector('#' + page + ' .edit-btn');
+      if (btn) btn.style.display = 'none';
+    }
+  });
+
+  const photos = localStorage.getItem('photos');
+  if (photos) {
+    const photoUrls = JSON.parse(photos);
+    const gallery = document.getElementById('gallery');
+    photoUrls.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      gallery.appendChild(img);
+    });
+  }
+};
+</script>
+
+</body>
+</html>
